@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("postgresql://neondb_owner:npg_LxKTO1e2VJjd@ep-still-sun-aqgwmxr4-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require")
+}
+
+model Bean {
+  id        String   @id @default(cuid())
+  name      String
+  roaster   String?
+  origin    String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  brews     Brew[]
+}
+
+model Brew {
+  id         String   @id @default(cuid())
+  beanId     String
+  bean       Bean     @relation(fields: [beanId], references: [id], onDelete: Cascade)
+  grindSize  String
+  gramsIn    Float
+  gramsOut   Float
+  brewTime   String
+  brewMethod String
+  notes      String?
+  date       DateTime @default(now())
+  createdAt  DateTime @default(now())
+}
