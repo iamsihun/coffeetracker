@@ -44,6 +44,7 @@ export async function updateBean(id: string, formData: FormData) {
 
 export async function deleteBean(id: string) {
   await prisma.bean.delete({ where: { id } })
+  revalidatePath('/')
   redirect('/')
 }
 
