@@ -19,6 +19,7 @@ export async function createBean(formData: FormData) {
     },
   })
 
+  revalidatePath('/')
   redirect(`/beans/${bean.id}`)
 }
 
