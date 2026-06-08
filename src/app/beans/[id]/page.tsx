@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { updateBean, deleteBean, createBrew, updateBrew, deleteBrew } from '@/app/actions'
 import { SubmitButton } from '@/app/components/submit-button'
 import { SwipeableItem } from '@/app/components/swipeable-item'
+import { CollapsibleBrewForm } from '@/app/components/collapsible-brew-form'
 
 const BREW_METHODS = [
   'Espresso',
@@ -16,10 +17,6 @@ const BREW_METHODS = [
   'Cold Brew',
   'Other',
 ]
-
-function today() {
-  return new Date().toISOString().split('T')[0]
-}
 
 export default async function BeanPage({
   params,
@@ -139,104 +136,7 @@ export default async function BeanPage({
         )}
       </div>
 
-      {/* Log a brew */}
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-stone-100 mb-5">
-        <h2 className="text-base font-semibold text-stone-800 mb-4">Log a Brew</h2>
-        <form action={createBrew} className="space-y-3">
-          <input type="hidden" name="beanId" value={bean.id} />
-
-          <div>
-            <label className="block text-xs font-medium text-stone-500 mb-1">Brew Method</label>
-            <select
-              name="brewMethod"
-              required
-              className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white text-stone-800"
-            >
-              {BREW_METHODS.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">Grams In</label>
-              <input
-                type="number"
-                name="gramsIn"
-                step="0.1"
-                min="0"
-                required
-                placeholder="18"
-                className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">Grams Out</label>
-              <input
-                type="number"
-                name="gramsOut"
-                step="0.1"
-                min="0"
-                required
-                placeholder="36"
-                className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">Grind Size</label>
-              <input
-                type="text"
-                name="grindSize"
-                required
-                placeholder="e.g. 20 clicks"
-                className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">Brew Time</label>
-              <input
-                type="text"
-                name="brewTime"
-                required
-                placeholder="e.g. 2:30"
-                className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-stone-500 mb-1">Date</label>
-            <input
-              type="date"
-              name="date"
-              defaultValue={today()}
-              className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-stone-500 mb-1">Notes</label>
-            <textarea
-              name="notes"
-              placeholder="How did it taste?"
-              rows={2}
-              className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800 resize-none"
-            />
-          </div>
-
-          <SubmitButton
-            label="Log Brew"
-            pendingLabel="Logging..."
-            className="w-full bg-amber-700 text-white py-3 rounded-lg text-sm font-medium hover:bg-amber-800 transition-colors disabled:opacity-60"
-          />
-        </form>
-      </div>
+      <CollapsibleBrewForm beanId={bean.id} createBrewAction={createBrew} />
 
       {/* Brew history */}
       {bean.brews.length > 0 && (
