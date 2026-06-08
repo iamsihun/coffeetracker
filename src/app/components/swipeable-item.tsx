@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useTransition, type ReactNode } from 'react'
+import { useRef, useState, useTransition, useEffect, type ReactNode } from 'react'
 
 const DELETE_WIDTH = 80
 
@@ -16,27 +16,63 @@ export function SwipeableItem({
   const [offset, setOffset] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isPending, startTransition] = useTransition()
+  const containerRef = useRef<HTMLDivElement>(null)
   const startX = useRef<number | null>(null)
+  const startY = useRef<number | null>(null)
   const startOffset = useRef(0)
+  const isHorizontal = useRef<boolean | null>(null)
+  const liveOffset = useRef(0)
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    startX.current = e.touches[0].clientX
-    startOffset.current = offset
-    setIsAnimating(false)
-  }
+  useEffect(() => {
+    liveOffset.current = offset
+  }, [offset])
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (startX.current === null) return
-    const diff = startX.current - e.touches[0].clientX
-    const newOffset = Math.min(Math.max(startOffset.current + diff, 0), DELETE_WIDTH)
-    setOffset(newOffset)
-  }
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
 
-  const handleTouchEnd = () => {
-    setIsAnimating(true)
-    setOffset(offset > DELETE_WIDTH / 2 ? DELETE_WIDTH : 0)
-    startX.current = null
-  }
+    const onTouchStart = (e: TouchEvent) => {
+      startX.current = e.touches[0].clientX
+      startY.current = e.touches[0].clientY
+      startOffset.current = liveOffset.current
+      isHorizontal.current = null
+      setIsAnimating(false)
+    }
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (startX.current === null || startY.current === null) return
+      const dx = startX.current - e.touches[0].clientX
+      const dy = startY.current - e.touches[0].clientY
+
+      if (isHorizontal.current === null && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
+        isHorizontal.current = Math.abs(dx) > Math.abs(dy)
+      }
+
+      if (isHorizontal.current) {
+        e.preventDefault()
+        setOffset(Math.min(Math.max(startOffset.current + dx, 0), DELETE_WIDTH))
+      }
+    }
+
+    const onTouchEnd = () => {
+      if (!isHorizontal.current) return
+      setIsAnimating(true)
+      setOffset(liveOffset.current > DELETE_WIDTH / 2 ? DELETE_WIDTH : 0)
+      startX.current = null
+      startY.current = null
+      isHorizontal.current = null
+    }
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true })
+    el.addEventListener('touchmove', onTouchMove, { passive: false })
+    el.addEventListener('touchend', onTouchEnd, { passive: true })
+
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart)
+      el.removeEventListener('touchmove', onTouchMove)
+      el.removeEventListener('touchend', onTouchEnd)
+    }
+  }, [])
 
   const handleContentClick = (e: React.MouseEvent) => {
     if (offset > 0) {
@@ -54,7 +90,7 @@ export function SwipeableItem({
   }
 
   return (
-    <div className={`relative overflow-hidden rounded-xl ${className}`}>
+    <div ref={containerRef} className={`relative overflow-hidden rounded-xl ${className}`}>
       {/* Delete zone revealed on swipe */}
       <div
         className="absolute right-0 top-0 bottom-0 flex items-center justify-center bg-red-500"
