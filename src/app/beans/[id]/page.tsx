@@ -136,7 +136,7 @@ export default async function BeanPage({
         )}
       </div>
 
-      <CollapsibleBrewForm beanId={bean.id} createBrewAction={createBrew} />
+      <CollapsibleBrewForm beanId={bean.id} createBrewAction={createBrew} initialOpen={!searchParams.editBrew} />
 
       {/* Brew history */}
       {bean.brews.length > 0 && (

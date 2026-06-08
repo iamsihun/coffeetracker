@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { SubmitButton } from './submit-button'
 
 const BREW_METHODS = [
@@ -22,11 +22,17 @@ function today() {
 export function CollapsibleBrewForm({
   beanId,
   createBrewAction,
+  initialOpen = true,
 }: {
   beanId: string
   createBrewAction: (formData: FormData) => Promise<void>
+  initialOpen?: boolean
 }) {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(initialOpen)
+
+  useEffect(() => {
+    setIsOpen(initialOpen)
+  }, [initialOpen])
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-stone-100 mb-5">
