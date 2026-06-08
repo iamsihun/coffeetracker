@@ -74,6 +74,32 @@ export async function createBrew(formData: FormData) {
   revalidatePath(`/beans/${beanId}`)
 }
 
+export async function updateBrew(id: string, formData: FormData) {
+  const beanId = formData.get('beanId') as string
+  const grindSize = (formData.get('grindSize') as string).trim()
+  const gramsIn = parseFloat(formData.get('gramsIn') as string)
+  const gramsOut = parseFloat(formData.get('gramsOut') as string)
+  const brewTime = (formData.get('brewTime') as string).trim()
+  const brewMethod = formData.get('brewMethod') as string
+  const notes = (formData.get('notes') as string | null)?.trim()
+  const dateStr = formData.get('date') as string
+
+  await prisma.brew.update({
+    where: { id },
+    data: {
+      grindSize,
+      gramsIn,
+      gramsOut,
+      brewTime,
+      brewMethod,
+      notes: notes || null,
+      date: dateStr ? new Date(dateStr) : undefined,
+    },
+  })
+
+  redirect(`/beans/${beanId}`)
+}
+
 export async function deleteBrew(id: string, beanId: string) {
   await prisma.brew.delete({ where: { id } })
   revalidatePath(`/beans/${beanId}`)
