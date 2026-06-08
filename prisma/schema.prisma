@@ -9,13 +9,14 @@ datasource db {
 }
 
 model Bean {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
   roaster   String?
   origin    String?
   notes     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  roastDate DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   brews     Brew[]
 }
 
@@ -29,6 +30,7 @@ model Brew {
   brewTime   String
   brewMethod String
   notes      String?
+  grinder    String?
   date       DateTime @default(now())
   createdAt  DateTime @default(now())
 }

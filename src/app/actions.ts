@@ -9,6 +9,7 @@ export async function createBean(formData: FormData) {
   const roaster = (formData.get('roaster') as string | null)?.trim()
   const origin = (formData.get('origin') as string | null)?.trim()
   const notes = (formData.get('notes') as string | null)?.trim()
+  const roastDateStr = formData.get('roastDate') as string | null
 
   const bean = await prisma.bean.create({
     data: {
@@ -16,6 +17,7 @@ export async function createBean(formData: FormData) {
       roaster: roaster || null,
       origin: origin || null,
       notes: notes || null,
+      roastDate: roastDateStr ? new Date(roastDateStr) : null,
     },
   })
 
@@ -28,6 +30,7 @@ export async function updateBean(id: string, formData: FormData) {
   const roaster = (formData.get('roaster') as string | null)?.trim()
   const origin = (formData.get('origin') as string | null)?.trim()
   const notes = (formData.get('notes') as string | null)?.trim()
+  const roastDateStr = formData.get('roastDate') as string | null
 
   await prisma.bean.update({
     where: { id },
@@ -36,6 +39,7 @@ export async function updateBean(id: string, formData: FormData) {
       roaster: roaster || null,
       origin: origin || null,
       notes: notes || null,
+      roastDate: roastDateStr ? new Date(roastDateStr) : null,
     },
   })
 
@@ -56,6 +60,7 @@ export async function createBrew(formData: FormData) {
   const brewTime = (formData.get('brewTime') as string).trim()
   const brewMethod = formData.get('brewMethod') as string
   const notes = (formData.get('notes') as string | null)?.trim()
+  const grinder = (formData.get('grinder') as string | null)?.trim()
   const dateStr = formData.get('date') as string
 
   await prisma.brew.create({
@@ -67,6 +72,7 @@ export async function createBrew(formData: FormData) {
       brewTime,
       brewMethod,
       notes: notes || null,
+      grinder: grinder || null,
       date: dateStr ? new Date(dateStr) : new Date(),
     },
   })
@@ -82,6 +88,7 @@ export async function updateBrew(id: string, formData: FormData) {
   const brewTime = (formData.get('brewTime') as string).trim()
   const brewMethod = formData.get('brewMethod') as string
   const notes = (formData.get('notes') as string | null)?.trim()
+  const grinder = (formData.get('grinder') as string | null)?.trim()
   const dateStr = formData.get('date') as string
 
   await prisma.brew.update({
@@ -93,6 +100,7 @@ export async function updateBrew(id: string, formData: FormData) {
       brewTime,
       brewMethod,
       notes: notes || null,
+      grinder: grinder || null,
       date: dateStr ? new Date(dateStr) : undefined,
     },
   })

@@ -50,6 +50,15 @@ export default function NewBeanPage() {
         </div>
 
         <div>
+          <label className="block text-sm font-medium text-stone-700 mb-1.5">Roast Date</label>
+          <input
+            type="date"
+            name="roastDate"
+            className="w-full px-3 py-3 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-stone-800"
+          />
+        </div>
+
+        <div>
           <label className="block text-sm font-medium text-stone-700 mb-1.5">Notes</label>
           <textarea
             name="notes"

@@ -26,14 +26,21 @@ export default async function BeanPage({
   params: { id: string }
   searchParams: { edit?: string; editBrew?: string }
 }) {
-  const bean = await prisma.bean.findUnique({
-    where: { id: params.id },
-    include: {
-      brews: { orderBy: { date: 'desc' } },
-    },
-  })
+  const [bean, grinderRows] = await Promise.all([
+    prisma.bean.findUnique({
+      where: { id: params.id },
+      include: { brews: { orderBy: { date: 'desc' } } },
+    }),
+    prisma.brew.findMany({
+      where: { grinder: { not: null } },
+      select: { grinder: true },
+      distinct: ['grinder'],
+    }),
+  ])
 
   if (!bean) notFound()
+
+  const previousGrinders = grinderRows.map((r) => r.grinder as string)
 
   const isEditing = searchParams.edit === 'true'
   const updateBeanWithId = updateBean.bind(null, bean.id)
@@ -83,6 +90,15 @@ export default async function BeanPage({
               />
             </div>
             <div>
+              <label className="block text-xs font-medium text-stone-500 mb-1">Roast Date</label>
+              <input
+                type="date"
+                name="roastDate"
+                defaultValue={bean.roastDate ? bean.roastDate.toISOString().split('T')[0] : ''}
+                className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
+              />
+            </div>
+            <div>
               <label className="block text-xs font-medium text-stone-500 mb-1">Notes</label>
               <textarea
                 name="notes"
@@ -124,9 +140,13 @@ export default async function BeanPage({
                 />
               </div>
             </div>
-            {(bean.roaster || bean.origin) && (
+            {(bean.roaster || bean.origin || bean.roastDate) && (
               <p className="text-sm text-stone-500 mt-1">
-                {[bean.roaster, bean.origin].filter(Boolean).join(' · ')}
+                {[
+                  bean.roaster,
+                  bean.origin,
+                  bean.roastDate && `Roasted ${new Date(bean.roastDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`,
+                ].filter(Boolean).join(' · ')}
               </p>
             )}
             {bean.notes && (
@@ -136,7 +156,7 @@ export default async function BeanPage({
         )}
       </div>
 
-      <CollapsibleBrewForm beanId={bean.id} createBrewAction={createBrew} initialOpen={!searchParams.editBrew} />
+      <CollapsibleBrewForm beanId={bean.id} createBrewAction={createBrew} initialOpen={!searchParams.editBrew} previousGrinders={previousGrinders} />
 
       {/* Brew history */}
       {bean.brews.length > 0 && (
@@ -192,6 +212,17 @@ export default async function BeanPage({
                           <input type="text" name="brewTime" required defaultValue={brew.brewTime}
                             className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800" />
                         </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-stone-500 mb-1">Grinder</label>
+                        <input type="text" name="grinder" list="grinder-suggestions-edit" placeholder="e.g. Comandante"
+                          defaultValue={brew.grinder ?? ''}
+                          className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800" />
+                        <datalist id="grinder-suggestions-edit">
+                          {previousGrinders.map((g) => (
+                            <option key={g} value={g} />
+                          ))}
+                        </datalist>
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-stone-500 mb-1">Date</label>
@@ -277,7 +308,7 @@ export default async function BeanPage({
                     </div>
 
                     <div className="mt-2 text-xs text-stone-500">
-                      Grind: {brew.grindSize}
+                      Grind: {brew.grindSize}{brew.grinder && ` · ${brew.grinder}`}
                     </div>
 
                     {brew.notes && (

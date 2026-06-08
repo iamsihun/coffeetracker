@@ -23,10 +23,12 @@ export function CollapsibleBrewForm({
   beanId,
   createBrewAction,
   initialOpen = true,
+  previousGrinders = [],
 }: {
   beanId: string
   createBrewAction: (formData: FormData) => Promise<void>
   initialOpen?: boolean
+  previousGrinders?: string[]
 }) {
   const [isOpen, setIsOpen] = useState(initialOpen)
 
@@ -109,6 +111,19 @@ export function CollapsibleBrewForm({
                   className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
                 />
               </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-stone-500 mb-1">Grinder</label>
+              <input
+                type="text" name="grinder" list="grinder-suggestions" placeholder="e.g. Comandante"
+                className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
+              />
+              <datalist id="grinder-suggestions">
+                {previousGrinders.map((g) => (
+                  <option key={g} value={g} />
+                ))}
+              </datalist>
             </div>
 
             <div>
