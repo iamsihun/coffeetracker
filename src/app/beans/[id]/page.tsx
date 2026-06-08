@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { updateBean, deleteBean, createBrew, deleteBrew } from '@/app/actions'
 import { SubmitButton } from '@/app/components/submit-button'
+import { SwipeableItem } from '@/app/components/swipeable-item'
 
 const BREW_METHODS = [
   'Espresso',
@@ -249,10 +250,12 @@ export default async function BeanPage({
               const deleteBrewWithIds = deleteBrew.bind(null, brew.id, bean.id)
               const ratio = brew.gramsOut / brew.gramsIn
               return (
-                <div
+                <SwipeableItem
                   key={brew.id}
-                  className="bg-white rounded-xl p-4 shadow-sm border border-stone-100"
+                  deleteAction={deleteBrewWithIds}
+                  className="shadow-sm border border-stone-100"
                 >
+                  <div className="p-4">
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <span className="font-medium text-stone-800 text-sm">{brew.brewMethod}</span>
@@ -264,10 +267,10 @@ export default async function BeanPage({
                         })}
                       </span>
                     </div>
-                    <form action={deleteBrewWithIds}>
+                    <form action={deleteBrewWithIds} className="hidden md:block">
                       <SubmitButton
                         label="✕"
-                        pendingLabel="..."
+                        pendingLabel="···"
                         className="text-stone-300 hover:text-red-400 transition-colors text-base leading-none p-1 -mr-1 -mt-1 disabled:opacity-40"
                         aria-label="Delete brew"
                       />
@@ -302,7 +305,8 @@ export default async function BeanPage({
                   {brew.notes && (
                     <p className="mt-1.5 text-xs text-stone-500 italic">{brew.notes}</p>
                   )}
-                </div>
+                  </div>
+                </SwipeableItem>
               )
             })}
           </div>
