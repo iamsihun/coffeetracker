@@ -5,6 +5,7 @@ import { updateBean, deleteBean, createBrew, updateBrew, deleteBrew } from '@/ap
 import { SubmitButton } from '@/app/components/submit-button'
 import { SwipeableItem } from '@/app/components/swipeable-item'
 import { CollapsibleBrewForm } from '@/app/components/collapsible-brew-form'
+import { ConfirmDeleteButton } from '@/app/components/confirm-delete-button'
 
 const BREW_METHODS = [
   'Espresso',
@@ -115,13 +116,12 @@ export default async function BeanPage({
                 >
                   Edit
                 </Link>
-                <form action={deleteBeanWithId}>
-                  <SubmitButton
-                    label="Delete"
-                    pendingLabel="Deleting..."
-                    className="text-xs text-stone-400 border border-stone-200 px-2.5 py-1 rounded-md hover:text-red-500 hover:border-red-200 transition-colors disabled:opacity-60"
-                  />
-                </form>
+                <ConfirmDeleteButton
+                  deleteAction={deleteBeanWithId}
+                  message="Delete this bean and all its brews?"
+                  label="Delete"
+                  className="text-xs text-stone-400 border border-stone-200 px-2.5 py-1 rounded-md hover:text-red-500 hover:border-red-200 transition-colors"
+                />
               </div>
             </div>
             {(bean.roaster || bean.origin) && (
@@ -247,14 +247,13 @@ export default async function BeanPage({
                         >
                           Edit
                         </Link>
-                        <form action={deleteBrewWithIds} className="hidden md:block">
-                          <SubmitButton
-                            label="✕"
-                            pendingLabel="···"
-                            className="text-stone-300 hover:text-red-400 transition-colors text-base leading-none p-1 disabled:opacity-40"
-                            aria-label="Delete brew"
-                          />
-                        </form>
+                        <ConfirmDeleteButton
+                          deleteAction={deleteBrewWithIds}
+                          message="Delete this brew?"
+                          label="✕"
+                          className="hidden md:block text-stone-300 hover:text-red-400 transition-colors text-base leading-none p-1"
+                          aria-label="Delete brew"
+                        />
                       </div>
                     </div>
 

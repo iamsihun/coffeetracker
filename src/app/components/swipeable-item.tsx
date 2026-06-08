@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState, useTransition, useEffect, type ReactNode } from 'react'
+import { ConfirmDialog } from './confirm-dialog'
 
 const DELETE_WIDTH = 80
 
@@ -15,6 +16,7 @@ export function SwipeableItem({
 }) {
   const [offset, setOffset] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   const [isPending, startTransition] = useTransition()
   const containerRef = useRef<HTMLDivElement>(null)
   const startX = useRef<number | null>(null)
@@ -84,13 +86,30 @@ export function SwipeableItem({
   }
 
   const handleDelete = () => {
+    setShowConfirm(true)
+  }
+
+  const handleConfirm = () => {
     startTransition(async () => {
       await deleteAction()
     })
   }
 
+  const handleCancel = () => {
+    setShowConfirm(false)
+    setIsAnimating(true)
+    setOffset(0)
+  }
+
   return (
     <div ref={containerRef} className={`relative overflow-hidden rounded-xl ${className}`}>
+      <ConfirmDialog
+        isOpen={showConfirm}
+        message="Are you sure you want to delete this?"
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+        isPending={isPending}
+      />
       {/* Delete zone revealed on swipe */}
       <div
         className="absolute right-0 top-0 bottom-0 flex items-center justify-center bg-red-500"
@@ -101,7 +120,7 @@ export function SwipeableItem({
           disabled={isPending}
           className="w-full h-full text-white font-medium text-sm disabled:opacity-60"
         >
-          {isPending ? '···' : 'Delete'}
+          Delete
         </button>
       </div>
 
