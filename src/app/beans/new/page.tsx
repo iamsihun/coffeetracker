@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createBean } from '@/app/actions'
+import { SubmitButton } from '@/app/components/submit-button'
 
 export default function NewBeanPage() {
   return (
@@ -58,12 +59,11 @@ export default function NewBeanPage() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-amber-700 text-white py-3 rounded-lg font-medium hover:bg-amber-800 transition-colors mt-2"
-        >
-          Add Bean
-        </button>
+        <SubmitButton
+          label="Add Bean"
+          pendingLabel="Adding..."
+          className="w-full bg-amber-700 text-white py-3 rounded-lg font-medium hover:bg-amber-800 transition-colors mt-2 disabled:opacity-60"
+        />
       </form>
     </div>
   )

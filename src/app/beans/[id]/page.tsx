@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { updateBean, deleteBean, createBrew, deleteBrew } from '@/app/actions'
+import { SubmitButton } from '@/app/components/submit-button'
 
 const BREW_METHODS = [
   'Espresso',
@@ -92,12 +93,11 @@ export default async function BeanPage({
               />
             </div>
             <div className="flex gap-2 pt-1">
-              <button
-                type="submit"
-                className="flex-1 bg-amber-700 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-amber-800 transition-colors"
-              >
-                Save Changes
-              </button>
+              <SubmitButton
+                label="Save Changes"
+                pendingLabel="Saving..."
+                className="flex-1 bg-amber-700 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-amber-800 transition-colors disabled:opacity-60"
+              />
               <Link
                 href={`/beans/${bean.id}`}
                 className="flex-1 text-center bg-stone-100 text-stone-700 py-2.5 rounded-lg text-sm font-medium hover:bg-stone-200 transition-colors"
@@ -118,12 +118,11 @@ export default async function BeanPage({
                   Edit
                 </Link>
                 <form action={deleteBeanWithId}>
-                  <button
-                    type="submit"
-                    className="text-xs text-stone-400 border border-stone-200 px-2.5 py-1 rounded-md hover:text-red-500 hover:border-red-200 transition-colors"
-                  >
-                    Delete
-                  </button>
+                  <SubmitButton
+                    label="Delete"
+                    pendingLabel="Deleting..."
+                    className="text-xs text-stone-400 border border-stone-200 px-2.5 py-1 rounded-md hover:text-red-500 hover:border-red-200 transition-colors disabled:opacity-60"
+                  />
                 </form>
               </div>
             </div>
@@ -230,12 +229,11 @@ export default async function BeanPage({
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-amber-700 text-white py-3 rounded-lg text-sm font-medium hover:bg-amber-800 transition-colors"
-          >
-            Log Brew
-          </button>
+          <SubmitButton
+            label="Log Brew"
+            pendingLabel="Logging..."
+            className="w-full bg-amber-700 text-white py-3 rounded-lg text-sm font-medium hover:bg-amber-800 transition-colors disabled:opacity-60"
+          />
         </form>
       </div>
 
@@ -267,13 +265,12 @@ export default async function BeanPage({
                       </span>
                     </div>
                     <form action={deleteBrewWithIds}>
-                      <button
-                        type="submit"
-                        className="text-stone-300 hover:text-red-400 transition-colors text-base leading-none p-1 -mr-1 -mt-1"
+                      <SubmitButton
+                        label="✕"
+                        pendingLabel="..."
+                        className="text-stone-300 hover:text-red-400 transition-colors text-base leading-none p-1 -mr-1 -mt-1 disabled:opacity-40"
                         aria-label="Delete brew"
-                      >
-                        ✕
-                      </button>
+                      />
                     </form>
                   </div>
 
