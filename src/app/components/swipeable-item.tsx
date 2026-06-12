@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState, useTransition, useEffect, type ReactNode } from 'react'
+import { cn } from '@/lib/utils'
 import { ConfirmDialog } from './confirm-dialog'
 
 const DELETE_WIDTH = 80
@@ -102,7 +103,13 @@ export function SwipeableItem({
   }
 
   return (
-    <div ref={containerRef} className={`relative overflow-hidden rounded-xl ${className}`}>
+    <div
+      ref={containerRef}
+      className={cn(
+        'relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm',
+        className
+      )}
+    >
       <ConfirmDialog
         isOpen={showConfirm}
         message="Are you sure you want to delete this?"
@@ -112,21 +119,21 @@ export function SwipeableItem({
       />
       {/* Delete zone revealed on swipe */}
       <div
-        className="absolute right-0 top-0 bottom-0 flex items-center justify-center bg-red-500"
+        className="absolute right-0 top-0 bottom-0 flex items-center justify-center bg-destructive"
         style={{ width: DELETE_WIDTH }}
       >
         <button
           onClick={handleDelete}
           disabled={isPending}
-          className="w-full h-full text-white font-medium text-sm disabled:opacity-60"
+          className="h-full w-full text-sm font-medium text-destructive-foreground disabled:opacity-60"
         >
           Delete
         </button>
       </div>
 
-      {/* Swipeable content — bg-white covers the delete zone when offset is 0 */}
+      {/* Swipeable content — card background covers the delete zone when offset is 0 */}
       <div
-        className="bg-white"
+        className="bg-card"
         style={{
           transform: `translateX(-${offset}px)`,
           transition: isAnimating ? 'transform 0.2s ease-out' : 'none',

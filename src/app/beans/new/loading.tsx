@@ -1,19 +1,24 @@
+import { Card, CardContent } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+
 export default function Loading() {
   return (
-    <div className="animate-pulse">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="h-5 w-5 bg-stone-200 rounded" />
-        <div className="h-7 w-32 bg-stone-200 rounded-lg" />
+    <div>
+      <div className="mb-6 flex items-center gap-2">
+        <Skeleton className="h-8 w-8" />
+        <Skeleton className="h-7 w-32" />
       </div>
-      <div className="space-y-4">
-        {[...Array(4)].map((_, i) => (
-          <div key={i}>
-            <div className="h-4 w-24 bg-stone-200 rounded mb-1.5" />
-            <div className="h-12 w-full bg-stone-100 rounded-lg" />
-          </div>
-        ))}
-        <div className="h-12 w-full bg-stone-200 rounded-lg mt-2" />
-      </div>
+      <Card>
+        <CardContent className="space-y-4 p-4 pt-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="space-y-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          ))}
+          <Skeleton className="mt-2 h-10 w-full" />
+        </CardContent>
+      </Card>
     </div>
   )
 }

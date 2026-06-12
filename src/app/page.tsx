@@ -1,7 +1,11 @@
 import Link from 'next/link'
+import { ChevronRight, Coffee, Plus } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { deleteBean } from '@/app/actions'
 import { SwipeableItem } from '@/app/components/swipeable-item'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Card } from '@/components/ui/card'
 
 export default async function Home() {
   const beans = await prisma.bean.findMany({
@@ -17,28 +21,32 @@ export default async function Home() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold text-stone-800">My Beans</h1>
-        <Link
-          href="/beans/new"
-          className="bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-800 transition-colors"
-        >
-          + Add Bean
-        </Link>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-xl font-semibold tracking-tight">My Beans</h1>
+        <Button asChild size="sm">
+          <Link href="/beans/new">
+            <Plus />
+            Add Bean
+          </Link>
+        </Button>
       </div>
 
       {beans.length === 0 ? (
-        <div className="text-center py-20 text-stone-500">
-          <div className="text-5xl mb-4">☕</div>
-          <p className="font-medium text-stone-700 text-lg">No beans yet</p>
-          <p className="text-sm mt-1 mb-6">Add your first coffee bean to get started</p>
-          <Link
-            href="/beans/new"
-            className="bg-amber-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-amber-800 transition-colors inline-block"
-          >
-            Add Your First Bean
-          </Link>
-        </div>
+        <Card className="flex flex-col items-center border-dashed py-16 text-center shadow-none">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent">
+            <Coffee className="h-8 w-8 text-accent-foreground" />
+          </div>
+          <p className="text-lg font-medium">No beans yet</p>
+          <p className="mb-6 mt-1 text-sm text-muted-foreground">
+            Add your first coffee bean to get started
+          </p>
+          <Button asChild>
+            <Link href="/beans/new">
+              <Plus />
+              Add Your First Bean
+            </Link>
+          </Button>
+        </Card>
       ) : (
         <div className="space-y-3">
           {beans.map((bean) => {
@@ -47,37 +55,26 @@ export default async function Home() {
               <SwipeableItem
                 key={bean.id}
                 deleteAction={deleteBeanAction}
-                className="shadow-sm border border-stone-100 hover:shadow-md transition-shadow"
+                className="transition-shadow hover:shadow-md"
               >
-                <Link
-                  href={`/beans/${bean.id}`}
-                  className="block p-4 active:bg-stone-50"
-                >
+                <Link href={`/beans/${bean.id}`} className="block p-4 active:bg-muted/50">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h2 className="font-semibold text-stone-800 truncate">{bean.name}</h2>
+                      <h2 className="truncate font-semibold">{bean.name}</h2>
                       {(bean.roaster || bean.origin) && (
-                        <p className="text-sm text-stone-500 mt-0.5 truncate">
+                        <p className="mt-0.5 truncate text-sm text-muted-foreground">
                           {[bean.roaster, bean.origin].filter(Boolean).join(' · ')}
                         </p>
                       )}
                     </div>
-                    <svg
-                      className="w-5 h-5 text-stone-300 flex-shrink-0 mt-0.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <ChevronRight className="mt-0.5 h-5 w-5 flex-shrink-0 text-muted-foreground/40" />
                   </div>
-                  <div className="mt-3 flex items-center gap-2 text-xs text-stone-400">
-                    <span>
+                  <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                    <Badge variant="secondary" className="font-medium">
                       {bean._count.brews} {bean._count.brews === 1 ? 'brew' : 'brews'}
-                    </span>
+                    </Badge>
                     {bean.brews[0] && (
                       <>
-                        <span>·</span>
                         <span>Last: {bean.brews[0].brewMethod}</span>
                         <span>·</span>
                         <span>

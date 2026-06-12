@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, type ReactNode } from 'react'
+import { Button, type ButtonProps } from '@/components/ui/button'
 import { ConfirmDialog } from './confirm-dialog'
 
 export function ConfirmDeleteButton({
@@ -8,12 +9,16 @@ export function ConfirmDeleteButton({
   message,
   label,
   className,
+  variant = 'outline',
+  size = 'sm',
   'aria-label': ariaLabel,
 }: {
   deleteAction: () => Promise<void>
   message: string
-  label: string
+  label: ReactNode
   className?: string
+  variant?: ButtonProps['variant']
+  size?: ButtonProps['size']
   'aria-label'?: string
 }) {
   const [showConfirm, setShowConfirm] = useState(false)
@@ -27,14 +32,16 @@ export function ConfirmDeleteButton({
 
   return (
     <>
-      <button
+      <Button
         type="button"
+        variant={variant}
+        size={size}
         onClick={() => setShowConfirm(true)}
         className={className}
         aria-label={ariaLabel}
       >
         {label}
-      </button>
+      </Button>
       <ConfirmDialog
         isOpen={showConfirm}
         message={message}

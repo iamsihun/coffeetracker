@@ -1,6 +1,20 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { ChevronDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Card } from '@/components/ui/card'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { SubmitButton } from './submit-button'
 
 const BREW_METHODS = [
@@ -37,88 +51,65 @@ export function CollapsibleBrewForm({
   }, [initialOpen])
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-stone-100 mb-5">
-      <button
-        type="button"
-        onClick={() => setIsOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-4 py-4 text-left"
-      >
-        <h2 className="text-base font-semibold text-stone-800">Log a Brew</h2>
-        <svg
-          className="w-4 h-4 text-stone-400 transition-transform duration-200"
-          style={{ transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)' }}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
+    <Card className="mb-5">
+      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+        <CollapsibleTrigger asChild>
+          <button type="button" className="flex w-full items-center justify-between p-4 text-left">
+            <h2 className="text-base font-semibold">Log a Brew</h2>
+            <ChevronDown
+              className={cn(
+                'h-4 w-4 text-muted-foreground transition-transform duration-200',
+                !isOpen && '-rotate-90'
+              )}
+            />
+          </button>
+        </CollapsibleTrigger>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateRows: isOpen ? '1fr' : '0fr',
-          transition: 'grid-template-rows 0.2s ease-out',
-        }}
-      >
-        <div className="overflow-hidden">
-          <form action={createBrewAction} className="space-y-3 px-4 pb-4">
+        <CollapsibleContent>
+          <form action={createBrewAction} className="space-y-4 px-4 pb-4">
             <input type="hidden" name="beanId" value={beanId} />
 
-            <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">Brew Method</label>
-              <select
-                name="brewMethod"
-                required
-                className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white text-stone-800"
-              >
-                {BREW_METHODS.map((m) => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </select>
+            <div className="space-y-2">
+              <Label>Brew Method</Label>
+              <Select name="brewMethod" defaultValue="Espresso" required>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a method" />
+                </SelectTrigger>
+                <SelectContent>
+                  {BREW_METHODS.map((m) => (
+                    <SelectItem key={m} value={m}>
+                      {m}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-stone-500 mb-1">Grams In</label>
-                <input
-                  type="number" name="gramsIn" step="0.1" min="0" required placeholder="18"
-                  className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
-                />
+              <div className="space-y-2">
+                <Label htmlFor="gramsIn">Grams In</Label>
+                <Input type="number" id="gramsIn" name="gramsIn" step="0.1" min="0" required placeholder="18" />
               </div>
-              <div>
-                <label className="block text-xs font-medium text-stone-500 mb-1">Grams Out</label>
-                <input
-                  type="number" name="gramsOut" step="0.1" min="0" required placeholder="36"
-                  className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
-                />
+              <div className="space-y-2">
+                <Label htmlFor="gramsOut">Grams Out</Label>
+                <Input type="number" id="gramsOut" name="gramsOut" step="0.1" min="0" required placeholder="36" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-stone-500 mb-1">Grind Size</label>
-                <input
-                  type="text" name="grindSize" required placeholder="e.g. 20 clicks"
-                  className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
-                />
+              <div className="space-y-2">
+                <Label htmlFor="grindSize">Grind Size</Label>
+                <Input type="text" id="grindSize" name="grindSize" required placeholder="e.g. 20 clicks" />
               </div>
-              <div>
-                <label className="block text-xs font-medium text-stone-500 mb-1">Brew Time</label>
-                <input
-                  type="text" name="brewTime" required placeholder="e.g. 2:30"
-                  className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
-                />
+              <div className="space-y-2">
+                <Label htmlFor="brewTime">Brew Time</Label>
+                <Input type="text" id="brewTime" name="brewTime" required placeholder="e.g. 2:30" />
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">Grinder</label>
-              <input
-                type="text" name="grinder" list="grinder-suggestions" placeholder="e.g. Comandante"
-                className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
-              />
+            <div className="space-y-2">
+              <Label htmlFor="grinder">Grinder</Label>
+              <Input type="text" id="grinder" name="grinder" list="grinder-suggestions" placeholder="e.g. Comandante" />
               <datalist id="grinder-suggestions">
                 {previousGrinders.map((g) => (
                   <option key={g} value={g} />
@@ -126,30 +117,23 @@ export function CollapsibleBrewForm({
               </datalist>
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">Date</label>
-              <input
-                type="date" name="date" defaultValue={today()}
-                className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800"
+            <div className="space-y-2">
+              <Label htmlFor="date">Date</Label>
+              <Input type="date" id="date" name="date" defaultValue={today()} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="brew-notes">Notes</Label>
+              <Textarea
+                id="brew-notes" name="notes" placeholder="How did it taste?" rows={2}
+                className="min-h-0 resize-none"
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">Notes</label>
-              <textarea
-                name="notes" placeholder="How did it taste?" rows={2}
-                className="w-full px-3 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-800 resize-none"
-              />
-            </div>
-
-            <SubmitButton
-              label="Log Brew"
-              pendingLabel="Logging..."
-              className="w-full bg-amber-700 text-white py-3 rounded-lg text-sm font-medium hover:bg-amber-800 transition-colors disabled:opacity-60"
-            />
+            <SubmitButton label="Log Brew" pendingLabel="Logging..." className="w-full" />
           </form>
-        </div>
-      </div>
-    </div>
+        </CollapsibleContent>
+      </Collapsible>
+    </Card>
   )
 }

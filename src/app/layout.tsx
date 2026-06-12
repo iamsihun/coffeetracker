@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { Coffee } from 'lucide-react'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/next';
 
@@ -13,15 +14,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-stone-50 min-h-screen`}>
-        <header className="bg-amber-900 text-white px-4 py-4 sticky top-0 z-10 shadow-sm">
-          <div className="max-w-lg mx-auto">
-            <a href="/" className="text-lg font-semibold tracking-tight">
+      <body className={`${inter.className} min-h-screen bg-background antialiased`}>
+        <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="mx-auto flex h-14 max-w-lg items-center px-4">
+            <a href="/" className="flex items-center gap-2 text-lg font-semibold tracking-tight">
+              <Coffee className="h-5 w-5 text-primary" />
               Coffee Tracker
             </a>
           </div>
         </header>
-        <main className="max-w-lg mx-auto px-4 py-6">{children}</main>
+        <main className="mx-auto max-w-lg px-4 py-6">{children}</main>
         <Analytics />
       </body>
     </html>

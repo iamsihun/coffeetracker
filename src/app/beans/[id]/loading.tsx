@@ -1,39 +1,42 @@
+import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+
 export default function Loading() {
   return (
-    <div className="animate-pulse">
-      <div className="h-4 w-20 bg-stone-200 rounded mb-6" />
+    <div>
+      <Skeleton className="mb-6 h-4 w-20" />
 
       {/* Bean info card */}
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-stone-100 mb-5">
-        <div className="flex justify-between items-start gap-2">
-          <div className="h-7 w-48 bg-stone-200 rounded" />
+      <Card className="mb-5 p-4">
+        <div className="flex items-start justify-between gap-2">
+          <Skeleton className="h-7 w-48" />
           <div className="flex gap-1.5">
-            <div className="h-7 w-12 bg-stone-100 rounded-md" />
-            <div className="h-7 w-14 bg-stone-100 rounded-md" />
+            <Skeleton className="h-8 w-16" />
+            <Skeleton className="h-8 w-20" />
           </div>
         </div>
-        <div className="h-4 w-36 bg-stone-100 rounded mt-2" />
-        <div className="h-4 w-56 bg-stone-100 rounded mt-1.5" />
-      </div>
+        <Skeleton className="mt-2 h-4 w-36" />
+        <Skeleton className="mt-1.5 h-4 w-56" />
+      </Card>
 
       {/* Log a brew card */}
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-stone-100 mb-5">
-        <div className="h-5 w-24 bg-stone-200 rounded mb-4" />
+      <Card className="mb-5 p-4">
+        <Skeleton className="mb-4 h-5 w-24" />
         <div className="space-y-3">
-          <div className="h-10 w-full bg-stone-100 rounded-lg" />
+          <Skeleton className="h-10 w-full" />
           <div className="grid grid-cols-2 gap-3">
-            <div className="h-10 bg-stone-100 rounded-lg" />
-            <div className="h-10 bg-stone-100 rounded-lg" />
+            <Skeleton className="h-10" />
+            <Skeleton className="h-10" />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="h-10 bg-stone-100 rounded-lg" />
-            <div className="h-10 bg-stone-100 rounded-lg" />
+            <Skeleton className="h-10" />
+            <Skeleton className="h-10" />
           </div>
-          <div className="h-10 w-full bg-stone-100 rounded-lg" />
-          <div className="h-16 w-full bg-stone-100 rounded-lg" />
-          <div className="h-11 w-full bg-stone-200 rounded-lg" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-16 w-full" />
+          <Skeleton className="h-10 w-full" />
         </div>
-      </div>
+      </Card>
     </div>
   )
 }
