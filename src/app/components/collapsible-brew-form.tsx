@@ -82,7 +82,7 @@ export function CollapsibleBrewForm({
               <Label>Brew Method</Label>
               <Select name="brewMethod" defaultValue="Espresso" required>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a method" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {BREW_METHODS.map((m) => (
@@ -97,28 +97,28 @@ export function CollapsibleBrewForm({
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label htmlFor="gramsIn">Grams In</Label>
-                <Input type="number" id="gramsIn" name="gramsIn" step="0.1" min="0" required placeholder="18" />
+                <Input type="number" id="gramsIn" name="gramsIn" step="0.1" min="0" required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="gramsOut">Grams Out</Label>
-                <Input type="number" id="gramsOut" name="gramsOut" step="0.1" min="0" required placeholder="36" />
+                <Input type="number" id="gramsOut" name="gramsOut" step="0.1" min="0" required />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label htmlFor="grindSize">Grind Size</Label>
-                <Input type="text" id="grindSize" name="grindSize" required placeholder="e.g. 20 clicks" />
+                <Input type="text" id="grindSize" name="grindSize" required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="brewTime">Brew Time</Label>
-                <Input type="text" id="brewTime" name="brewTime" required placeholder="e.g. 2:30" />
+                <Input type="text" id="brewTime" name="brewTime" required/>
               </div>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="grinder">Grinder</Label>
-              <Input type="text" id="grinder" name="grinder" list="grinder-suggestions" placeholder="e.g. Comandante" />
+              <Input type="text" id="grinder" name="grinder" list="grinder-suggestions" />
               <datalist id="grinder-suggestions">
                 {previousGrinders.map((g) => (
                   <option key={g} value={g} />
@@ -134,7 +134,7 @@ export function CollapsibleBrewForm({
             <div className="space-y-2">
               <Label htmlFor="brew-notes">Notes</Label>
               <Textarea
-                id="brew-notes" name="notes" placeholder="How did it taste?" rows={2}
+                id="brew-notes" name="notes" rows={2}
                 className="min-h-0 resize-none"
               />
             </div>
