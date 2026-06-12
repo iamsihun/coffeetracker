@@ -10,10 +10,12 @@ export function SwipeableItem({
   children,
   deleteAction,
   className = '',
+  id,
 }: {
   children: ReactNode
   deleteAction: () => Promise<void>
   className?: string
+  id?: string
 }) {
   const [offset, setOffset] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -105,6 +107,7 @@ export function SwipeableItem({
   return (
     <div
       ref={containerRef}
+      id={id}
       className={cn(
         'relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm',
         className

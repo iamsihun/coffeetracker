@@ -66,12 +66,17 @@ const config: Config = {
           from: { height: 'var(--radix-collapsible-content-height)' },
           to: { height: '0' },
         },
+        'brew-highlight': {
+          '0%, 60%': { boxShadow: '0 0 0 2px hsl(var(--ring))' },
+          '100%': { boxShadow: '0 0 0 2px transparent' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'collapsible-down': 'collapsible-down 0.2s ease-out',
         'collapsible-up': 'collapsible-up 0.2s ease-out',
+        'brew-highlight': 'brew-highlight 2.5s ease-out',
       },
     },
   },

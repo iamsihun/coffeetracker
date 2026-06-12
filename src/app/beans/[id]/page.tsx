@@ -7,6 +7,7 @@ import { SubmitButton } from '@/app/components/submit-button'
 import { SwipeableItem } from '@/app/components/swipeable-item'
 import { CollapsibleBrewForm } from '@/app/components/collapsible-brew-form'
 import { ConfirmDeleteButton } from '@/app/components/confirm-delete-button'
+import { ClearCreatedParam } from '@/app/components/clear-created-param'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -38,7 +39,7 @@ export default async function BeanPage({
   searchParams,
 }: {
   params: { id: string }
-  searchParams: { edit?: string; editBrew?: string }
+  searchParams: { edit?: string; editBrew?: string; created?: string }
 }) {
   const [bean, grinderRows] = await Promise.all([
     prisma.bean.findUnique({
@@ -150,7 +151,16 @@ export default async function BeanPage({
         </CardContent>
       </Card>
 
-      <CollapsibleBrewForm beanId={bean.id} createBrewAction={createBrew} initialOpen={!searchParams.editBrew} previousGrinders={previousGrinders} />
+      <CollapsibleBrewForm
+        beanId={bean.id}
+        createBrewAction={createBrew}
+        initialOpen={!searchParams.editBrew && !searchParams.created}
+        previousGrinders={previousGrinders}
+      />
+
+      {searchParams.created && (
+        <ClearCreatedParam beanId={bean.id} createdId={searchParams.created} />
+      )}
 
       {/* Brew history */}
       {bean.brews.length > 0 && (
@@ -264,8 +274,15 @@ export default async function BeanPage({
                 )
               }
 
+              const isJustCreated = brew.id === searchParams.created
+
               return (
-                <SwipeableItem key={brew.id} deleteAction={deleteBrewWithIds}>
+                <SwipeableItem
+                  key={brew.id}
+                  deleteAction={deleteBrewWithIds}
+                  id={`brew-${brew.id}`}
+                  className={isJustCreated ? 'animate-brew-highlight' : undefined}
+                >
                   <div className="p-4">
                     <div className="mb-3 flex items-start justify-between">
                       <div>

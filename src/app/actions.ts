@@ -63,7 +63,7 @@ export async function createBrew(formData: FormData) {
   const grinder = (formData.get('grinder') as string | null)?.trim()
   const dateStr = formData.get('date') as string
 
-  await prisma.brew.create({
+  const brew = await prisma.brew.create({
     data: {
       beanId,
       grindSize,
@@ -78,6 +78,7 @@ export async function createBrew(formData: FormData) {
   })
 
   revalidatePath(`/beans/${beanId}`)
+  redirect(`/beans/${beanId}?created=${brew.id}`)
 }
 
 export async function updateBrew(id: string, formData: FormData) {
