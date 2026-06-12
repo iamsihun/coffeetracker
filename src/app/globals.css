@@ -57,4 +57,25 @@
   body {
     @apply bg-background text-foreground;
   }
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+}
+
+/* Applied to <html> only while the theme is switching, so color changes
+   cross-fade without slowing down normal hover/active transitions. */
+.theme-transition,
+.theme-transition *,
+.theme-transition ::before,
+.theme-transition ::after {
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease,
+    fill 0.35s ease,
+    stroke 0.35s ease,
+    box-shadow 0.35s ease !important;
 }

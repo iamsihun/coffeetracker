@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen bg-background antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark">
           <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="mx-auto flex h-14 max-w-lg items-center justify-between px-4">
               <a href="/" className="flex items-center gap-2 text-lg font-semibold tracking-tight">
