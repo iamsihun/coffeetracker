@@ -151,10 +151,7 @@ export default async function BeanPage({
         </CardContent>
       </Card>
 
-      {/* Keyed by the created brew id: initialOpen is false on every ?created
-          render, so consecutive logs need a remount to re-collapse the form */}
       <CollapsibleBrewForm
-        key={searchParams.created}
         beanId={bean.id}
         createBrewAction={createBrew}
         initialOpen={!searchParams.editBrew && !searchParams.created}

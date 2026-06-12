@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
@@ -45,10 +45,19 @@ export function CollapsibleBrewForm({
   previousGrinders?: string[]
 }) {
   const [isOpen, setIsOpen] = useState(initialOpen)
+  const formRef = useRef<HTMLFormElement>(null)
 
+  // One-way sync: external state (e.g. ?editBrew) may collapse the form, but
+  // never auto-expands it — only the user's toggle or initial mount opens it.
   useEffect(() => {
-    setIsOpen(initialOpen)
+    if (!initialOpen) setIsOpen(false)
   }, [initialOpen])
+
+  const handleCreate = async (formData: FormData) => {
+    await createBrewAction(formData)
+    formRef.current?.reset()
+    setIsOpen(false)
+  }
 
   return (
     <Card className="mb-5">
@@ -66,7 +75,7 @@ export function CollapsibleBrewForm({
         </CollapsibleTrigger>
 
         <CollapsibleContent>
-          <form action={createBrewAction} className="space-y-4 px-4 pb-4">
+          <form ref={formRef} action={handleCreate} className="space-y-4 px-4 pb-4">
             <input type="hidden" name="beanId" value={beanId} />
 
             <div className="space-y-2">
