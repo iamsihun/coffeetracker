@@ -44,7 +44,7 @@ export default async function BeanPage({
   const [bean, grinderRows] = await Promise.all([
     prisma.bean.findUnique({
       where: { id: params.id },
-      include: { brews: { orderBy: { date: 'desc' } } },
+      include: { brews: { orderBy: [{ date: 'desc' }, { createdAt: 'desc' }] } },
     }),
     prisma.brew.findMany({
       where: { grinder: { not: null } },

@@ -11,7 +11,7 @@ export default async function Home() {
   const beans = await prisma.bean.findMany({
     include: {
       brews: {
-        orderBy: { date: 'desc' },
+        orderBy: [{ date: 'desc' }, { createdAt: 'desc' }],
         take: 1,
       },
       _count: { select: { brews: true } },
