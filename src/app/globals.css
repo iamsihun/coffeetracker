@@ -65,17 +65,10 @@
   }
 }
 
-/* Applied to <html> only while the theme is switching, so color changes
-   cross-fade without slowing down normal hover/active transitions. */
-.theme-transition,
-.theme-transition *,
-.theme-transition ::before,
-.theme-transition ::after {
-  transition:
-    background-color 0.35s ease,
-    border-color 0.35s ease,
-    color 0.35s ease,
-    fill 0.35s ease,
-    stroke 0.35s ease,
-    box-shadow 0.35s ease !important;
+/* Theme switching uses the View Transitions API: the whole page cross-fades
+   as one snapshot, so text, backgrounds, and borders change in lockstep. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 350ms;
+  animation-timing-function: ease;
 }

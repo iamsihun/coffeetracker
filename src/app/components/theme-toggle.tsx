@@ -1,25 +1,27 @@
 'use client'
 
-import { useRef } from 'react'
+import { flushSync } from 'react-dom'
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 
-const TRANSITION_MS = 350
-
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme()
-  const transitionTimeout = useRef<number>()
 
   const toggleTheme = () => {
-    const root = document.documentElement
-    root.classList.add('theme-transition')
-    window.clearTimeout(transitionTimeout.current)
-    transitionTimeout.current = window.setTimeout(() => {
-      root.classList.remove('theme-transition')
-    }, TRANSITION_MS)
+    const next = resolvedTheme === 'dark' ? 'light' : 'dark'
+    const doc = document as Document & {
+      startViewTransition?: (callback: () => void) => void
+    }
 
-    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+    if (typeof doc.startViewTransition === 'function') {
+      // Snapshot the page, apply the theme synchronously, then cross-fade
+      doc.startViewTransition(() => {
+        flushSync(() => setTheme(next))
+      })
+    } else {
+      setTheme(next)
+    }
   }
 
   return (
